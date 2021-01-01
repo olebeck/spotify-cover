@@ -37,7 +37,7 @@
     left: calc(50vw - 320px);
     top: calc(50vh - 320px);
     width: auto;
-    height: 600px;
+    height: 640px;
     background-image: var(--imgnow);
   }
   
