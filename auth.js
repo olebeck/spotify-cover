@@ -146,7 +146,7 @@ class spotifyapi {
         if (!tokenSet) return
     
         if (tokenSet.expires_at < Date.now()) {
-        tokenSet = await createAccessToken({
+        tokenSet = await this.createAccessToken({
             grant_type: 'refresh_token',
             refresh_token: tokenSet.refresh_token,
         })
