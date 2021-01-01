@@ -1,7 +1,3 @@
-:root {
-    --imgnow: "";
-    --imgprev: "";
-}
 
 @font-face {
     font-family: 'Montserrat';
@@ -38,7 +34,6 @@
     top: calc(50vh - 320px);
     width: auto;
     height: 640px;
-    background-image: var(--imgnow);
   }
   
   * {
