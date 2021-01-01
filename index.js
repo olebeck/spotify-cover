@@ -1,5 +1,5 @@
 var client_id = "840b32ef33764217a79d9ae97bef3c07";
-var redirect_uri = "http://localhost:5500/";
+var redirect_uri = location.href;
 var scope = "user-read-playback-state";
 
 var api = new spotifyapi(client_id, redirect_uri, scope);
