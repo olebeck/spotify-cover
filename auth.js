@@ -14,6 +14,7 @@ function randomBytes(size) {
  */
 async function fetchJSON(input, init) {
     const response = await fetch(input, init)
+    if (response.status == 204) return {};
     const body = await response.json()
     if (!response.ok) {
       throw new ErrorResponse(response, body)
