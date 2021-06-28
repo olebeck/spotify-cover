@@ -1,54 +1,52 @@
-
-@font-face {
-    font-family: 'Montserrat';
-    font-style: normal;
-    font-weight: 200;
-    src: local('Montserrat-Regular'), url(Montserrat.woff2) format('woff2');
-    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
-  }
-  
-  body {
-    text-align: center;
+body {
     background: #272727;
     overflow: hidden;
-    /*font-family: 'Montserrat', sans-serif;*/
-    font-weight: 300;
-    color: #fff;
-  }
-  
-  .background {
+    padding: 0;
+    margin:0;
+}
+
+/* do the transitions between both views */
+.transparent {
+    opacity: 0;
+}
+.transparent>.cover {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.cover {
+    position: relative;
+    transition: opacity 1.5s ease-in-out;
+}
+
+.view {
+    height: 100vh;
     position: absolute;
+    transition: opacity 1.5s ease-in-out;
+}
+
+
+/* the images */
+.background {
     object-fit: cover;
-    left: -20px;
-    top: -20px;
-    width: calc(100vw + 40px);
-    height: calc(100vh + 40px);
+    left: -40px;
+    top: -40px;
+    width: calc(100vw + 80px);
+    height: calc(100vh + 80px);
     -webkit-filter: blur(20px) brightness(35%);
     filter: blur(20px) brightness(35%);
     overflow: hidden;
-  }
-  
-  .cover {
     position: absolute;
+}
+
+/* spotify album covers are always 640x640 so dont scream at me about using px*/
+.foreground {
     left: calc(50vw - 320px);
     top: calc(50vh - 320px);
-    width: auto;
+    width: 640px;
     height: 640px;
-  }
-  
-  * {
-    cursor: none;
-  }
-  
-  .track-info {
-    position: absolute;
-    bottom: 7vh;
-    width: 100vw;
-    text-align: center;
-    opacity: 0;
-  }
-  
-  .track-info > .title {
-    font-size: 20px;
-    margin-bottom: 6px;
-  }
+}
+
+*:fullscreen {
+    cursor: none !important;
+}

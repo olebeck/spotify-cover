@@ -1,12 +1,12 @@
 function base64url(bytes) {
     return btoa(String.fromCharCode(...bytes))
-      .replace(/=/g, '')
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_')
+    .replace(/=/g, '')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
 }
 function randomBytes(size) {
     return crypto.getRandomValues(new Uint8Array(size))
-  }
+}
 
 /**
  * @param {RequestInfo} input
@@ -37,9 +37,9 @@ async function fetchJSON(input, init) {
 class spotifyapi {
     token = null;
 
-    constructor(client_id, redirect_uri, scope) {
+    constructor(client_id, RedirectUri, scope) {
         this.client_id = client_id;
-        this.redirect_uri = redirect_uri;
+        this.RedirectUri = RedirectUri;
         this.scope = scope
         var code = new URLSearchParams(location.search).get("code");
         let tokenSet = JSON.parse(localStorage.getItem('tokenSet'))
@@ -67,7 +67,7 @@ class spotifyapi {
         const params = new URLSearchParams({
           client_id: this.client_id,
           response_type: 'code',
-          redirect_uri: this.redirect_uri,
+          redirect_uri: this.RedirectUri,
           code_challenge_method: 'S256',
           code_challenge: await this.generateCodeChallenge(code_verifier),
           state: state,
@@ -99,13 +99,13 @@ class spotifyapi {
         await this.createAccessToken({
             grant_type: 'authorization_code',
             code: params.get('code'),
-            redirect_uri: self.redirect_uri,
+            redirect_uri: this.RedirectUri,
             code_verifier: code_verifier,
         });
-        location.href = this.redirect_uri;
+        location.href = this.RedirectUri;
     }
 
-    async fetchWithToken(input) {
+    async fetchWithToken(input, method = "GET") {
         const accessToken = await this.getAccessToken()
       
         if (!accessToken) {
@@ -114,6 +114,7 @@ class spotifyapi {
       
         return fetchJSON(input, {
           headers: { Authorization: `Bearer ${accessToken}` },
+          method: method
         })
     }
 
@@ -147,12 +148,11 @@ class spotifyapi {
         if (!tokenSet) return
     
         if (tokenSet.expires_at < Date.now()) {
-        tokenSet = await this.createAccessToken({
-            grant_type: 'refresh_token',
-            refresh_token: tokenSet.refresh_token,
-        })
+            tokenSet = await this.createAccessToken({
+                grant_type: 'refresh_token',
+                refresh_token: tokenSet.refresh_token,
+            })
         }
-    
         return tokenSet.access_token
     }
 }
