@@ -36,21 +36,25 @@ async function fetchJSON(input, init) {
 
 class spotifyapi {
     token = null;
+    logged_in = false;
 
-    constructor(client_id, RedirectUri, scope) {
+    constructor(client_id, RedirectUri, scope, name) {
         this.client_id = client_id;
         this.RedirectUri = RedirectUri;
         this.scope = scope
+        this.name = name;
+    }
+
+    async login() {
         var code = new URLSearchParams(location.search).get("code");
-        let tokenSet = JSON.parse(localStorage.getItem('tokenSet'))
+        let tokenSet = JSON.parse(localStorage.getItem('tokenSet_'+this.name));
         if(!tokenSet) {
             if(code != undefined) {
-                this.completeLogin();
+                await this.completeLogin();
             } else {
-                this.beginLogin();
+                await this.beginLogin();
             }
         }
-
     }
 
     async generateCodeChallenge(code_verifier) {
@@ -134,7 +138,7 @@ class spotifyapi {
         const accessToken = response.access_token
         const expires_at = Date.now() + 1000 * response.expires_in
     
-        localStorage.setItem('tokenSet', JSON.stringify({ ...response, expires_at }))
+        localStorage.setItem('tokenSet_'+this.name, JSON.stringify({ ...response, expires_at }))
     
         return accessToken
     }
@@ -143,15 +147,21 @@ class spotifyapi {
      * @returns {Promise<string>}
      */
     async getAccessToken() {
-        let tokenSet = JSON.parse(localStorage.getItem('tokenSet'))
+        let tokenSet = JSON.parse(localStorage.getItem('tokenSet_'+this.name))
     
         if (!tokenSet) return
     
         if (tokenSet.expires_at < Date.now()) {
-            tokenSet = await this.createAccessToken({
-                grant_type: 'refresh_token',
-                refresh_token: tokenSet.refresh_token,
-            })
+            try {
+                tokenSet = await this.createAccessToken({
+                    grant_type: 'refresh_token',
+                    refresh_token: tokenSet.refresh_token,
+                })
+            } catch (error) {
+                localStorage.removeItem('tokenSet_'+this.name)
+                await this.login();
+                return this.getAccessToken();
+            }
         }
         return tokenSet.access_token
     }

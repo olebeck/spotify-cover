@@ -1,52 +1,66 @@
+:root {
+    --blur: 20px;
+}
+
 body {
+    /* dont blind me when no image is loaded */
     background: #272727;
-    overflow: hidden;
+    /* cover the entire window */
     padding: 0;
     margin:0;
+    width: 100%;
+    height: 100%;
 }
 
 /* do the transitions between both views */
 .transparent {
     opacity: 0;
-}
-.transparent>.cover {
-    opacity: 0;
+    filter: blur(var(--blur));
     pointer-events: none;
 }
 
-.cover {
-    position: relative;
-    transition: opacity 1.5s ease-in-out;
-}
-
 .view {
+    width: 100vw;
     height: 100vh;
+    overflow: hidden;
     position: absolute;
-    transition: opacity 1.5s ease-in-out;
+    /* transition for changing the image */
+    transition: opacity 1.5s ease-in-out, filter 1.5s ease-in-out;
 }
 
 
 /* the images */
 .background {
     object-fit: cover;
-    left: -40px;
-    top: -40px;
-    width: calc(100vw + 80px);
-    height: calc(100vh + 80px);
-    -webkit-filter: blur(20px) brightness(35%);
-    filter: blur(20px) brightness(35%);
-    overflow: hidden;
+    /* overscan the background so the blur works right on the edges*/
+    left: calc(var(--blur) * -2);
+    top: calc(var(--blur) * -2);
+    width: calc(100vw + calc(var(--blur) * 4));
+    height: calc(100vh + calc(var(--blur) * 4));
+    position: absolute;
+    /* blur background */
+    filter: blur(var(--blur)) brightness(35%);
+}
+
+.foreground {
+    width: 60%;
+    max-width: 80vmin;
+    max-height: 80vmin;
+    /* centering */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     position: absolute;
 }
 
-/* spotify album covers are always 640x640 so dont scream at me about using px*/
-.foreground {
-    left: calc(50vw - 320px);
-    top: calc(50vh - 320px);
-    width: 640px;
-    height: 640px;
+
+span.title {
+    position: absolute;
+    bottom: 0.75em;
+    left: 0.75em;
+    font-size: 3em;
+    color: white;
+    font-family: sans-serif;
+    transition: opacity 0.5s linear, filter 0.5s linear;
 }
 
-*:fullscreen {
-    cursor: none !important;
-}

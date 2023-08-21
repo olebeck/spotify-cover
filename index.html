@@ -3,19 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="fullscreen for spotify">
     <title>Spotify</title>
     <link rel="stylesheet" href="index.css">
-    <script defer src="auth.js"></script>
+    <script src="auth.js"></script>
+    <script src="common.js"></script>
     <script defer src="index.js"></script>
 </head>
 <body>
     <div class="view">
-        <img class="cover background" onload="loaded_new(event)">
+        <img class="cover background">
         <img class="cover foreground">
     </div>
     <div class="view transparent">
-        <img class="cover background" onload="loaded_new(event)">
+        <img class="cover background">
         <img class="cover foreground">
     </div>
+    <span class="title"></span>
+    <span class="title transparent"></span>
 </body>
 </html>
